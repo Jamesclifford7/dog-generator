@@ -1,0 +1,22 @@
+body {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    background-color: beige;
+}
+
+.hidden {
+    display: none;
+}
+
+img {
+    margin: 5px;
+}
+
+div {
+    margin: 15px;
+} 
+
+label {
+    display: inline-block;
+    margin-bottom: 5px;
+} 
