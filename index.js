@@ -5,17 +5,23 @@ function getValue() {
 
 function getDogImage() {
     fetch(`https://dog.ceo/api/breeds/image/random/${getValue()}`)
-        .then(function(response){
-            return response.json()
+        .then(function(response) {
+            if (getValue() >=1) {
+                return response.json()
+            } else {
+                throw new Error ('Oops! Please enter a number')
+            }
         })
-        // .then(responseJson => console.log(responseJson))
-        .then(responseJson => displayResults(responseJson))
-        .catch(error => alert('Oops! Something is wrong, please try again later'));
+        .then(function(responseJson) {
+            console.log(responseJson)
+            return displayResults(responseJson)
+        })
+        .catch(function(error) {
+            alert(error)
+        });
 } 
 
-
 function displayResults(responseJson) {
-    // why doesn't '.html' work for this, but '.replaceWith' does?
     for (i = 0; i < responseJson.message.length; i++) {
         $('.results').append(`<img class="results-image" src=${responseJson.message[i]} width=400 height=autp>`);
     }
@@ -24,11 +30,10 @@ function displayResults(responseJson) {
 
 function clearResults() {
     $('.clear-button').on('click', function(event) {
-        $('.results-image').remove()
+        $('.results-image').remove(); 
+        $('#amount').val('3');
     });
 }
-
-// clearResults();
 
 function watchFirstForm() {
     $('.generate-form').on('submit', function(event){
@@ -36,8 +41,6 @@ function watchFirstForm() {
         getDogImage();
     })
 } 
-
-// watchFirstForm();
 
 /* --------------------------- */
 
@@ -49,26 +52,33 @@ function getBreedValue() {
 function getBreedImage() {
     fetch(`https://dog.ceo/api/breed/${getBreedValue()}/images/random`)
         .then(function(response) {
-            return response.json()
+            console.log(response);
+            if (response.ok) {
+                return response.json()
+            } else {
+                throw new Error ('Oops! Please enter the name of a dog breed')
+            }
         })
         .then(function(responseJson) {
             displayBreedResults(responseJson)
         })
-        .catch(error => alert('Oops! Please enter the name of a dog breed'));
+        .catch(function(error) {
+            $('.breed-results').removeClass('hidden');
+            $('.breed-results').html(`<p>${error.message}</p>`)
+        });
 }
 
 function displayBreedResults(responseJson) {
-    $('.breed-results').append(`<img class="breed-results-image" src="${responseJson.message}" width=400 height=auto>`);
+    $('.breed-results').html(`<img class="breed-results-image" src="${responseJson.message}" width=400 height=auto>`);
     $('.breed-results').removeClass('hidden');
-}
+} 
 
 function clearBreedResults() {
     $('.clear-breeds-button').on('click', function(event) {
         $('.breed-results-image').remove();
+        $('#breed-name').val('');
     });
 }
-
-// clearBreedResults();
 
 function watchSecondForm() {
     $('.generate-breed-form').on('submit', function(event){
@@ -76,8 +86,6 @@ function watchSecondForm() {
         getBreedImage();
     })
 }
-
-// watchSecondForm();
 
 function handleApp() {
     clearResults();
